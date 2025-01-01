@@ -1,9 +1,5 @@
 const Container = ({ children }) => {
-  return (
-    <div id={id} className={"max-w-screen-xl mx-auto pb-14 px-4"}>
-      {children}
-    </div>
-  );
+  return <div className="max-w-screen-xl mx-auto my-12">{children}</div>;
 };
 
 export default Container;
