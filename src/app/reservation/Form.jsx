@@ -6,9 +6,12 @@ import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 const BookingForm = () => {
   const [availableTimes, setAvailableTimes] = useState([]);
+  const [phoneNumber, setPhoneNumber] = useState("");
   const router = useRouter();
   const {
     register,
@@ -57,16 +60,31 @@ const BookingForm = () => {
   });
 
   const onSubmit = (data) => {
+    let countryCode = "";
+    let phone = "";
+
+    // Extract country code and phone number
+    if (phoneNumber.startsWith("+")) {
+      countryCode = phoneNumber.slice(1, phoneNumber.length - 10); // Get the country code
+      phone = phoneNumber.slice(-10); // Get the phone number
+    } else {
+      countryCode = phoneNumber.slice(0, phoneNumber.length - 10); // Get the country code
+      phone = phoneNumber.slice(-10); // Get the phone number
+    }
+
     const newBooking = {
       date: data.date,
       time: data.time,
       guests: data.guests,
       name: data.name,
-      contact: data.contact,
+      email: data.email,
+      countryCode: countryCode,
+      phone: phone,
     };
-    console.log("booking", newBooking);
+
     bookingMutation.mutate(newBooking);
-    reset();
+    reset(); // Reset form fields
+    setPhoneNumber(""); // Reset the phone number manually
     router.push("/bookings");
   };
 
@@ -74,10 +92,14 @@ const BookingForm = () => {
     <div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="max-w-md mx-auto bg-white p-6 rounded shadow-md"
+        className="max-w-xl mx-auto bg-white p-8 rounded shadow-md space-y-4"
       >
         <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-2">Date</label>
+          <div className="flex items-center space-x-1 mb-2">
+            <label className="block font-medium">Date</label>
+            <span className="text-red-600">*</span>
+          </div>
+
           <input
             type="date"
             {...register("date", { required: "Date is required" })}
@@ -89,7 +111,10 @@ const BookingForm = () => {
           )}
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-2">Time</label>
+          <div className="flex items-center space-x-1 mb-2">
+            <label className="block font-medium">Time</label>
+            <span className="text-red-600">*</span>
+          </div>
           <select
             {...register("time", { required: "Time is required" })}
             className="w-full p-3 border rounded"
@@ -106,13 +131,18 @@ const BookingForm = () => {
           )}
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-2">Guests</label>
+          <div className="flex items-center space-x-1 mb-2">
+            <label className="block font-medium">Guests</label>
+            <span className="text-red-600">*</span>
+          </div>
+
           <input
             type="number"
             {...register("guests", {
               required: "Number of guests is required",
               min: { value: 1, message: "At least 1 guest required" },
             })}
+            placeholder="1 Person"
             className="w-full p-3 border rounded"
             min="1"
           />
@@ -121,7 +151,10 @@ const BookingForm = () => {
           )}
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-2">Name</label>
+          <div className="flex items-center space-x-1 mb-2">
+            <label className="block font-medium">Name</label>
+            <span className="text-red-600">*</span>
+          </div>
           <input
             type="text"
             {...register("name", { required: "Name is required" })}
@@ -133,21 +166,37 @@ const BookingForm = () => {
           )}
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-2">
-            Contact
-          </label>
+          <div className="flex items-center space-x-1 mb-2">
+            <label className="block font-medium">Email</label>
+            <span className="text-red-600">*</span>
+          </div>
           <input
-            type="tel"
-            {...register("contact", {
-              required: "Contact number is required",
-            })}
+            type="text"
+            {...register("email", { required: "Email is required" })}
             className="w-full p-3 border rounded"
-            placeholder="Contact Number"
+            placeholder="Your Email"
           />
-          {errors.contact && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.contact.message}
-            </p>
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+          )}
+        </div>
+        <div className="mb-4">
+          <div className="flex items-center space-x-1 mb-2">
+            <label className="block font-medium">Phone</label>
+            <span className="text-red-600">*</span>
+          </div>
+          <PhoneInput
+            country={"in"}
+            value={phoneNumber} // Set the value manually
+            onChange={(value) => setPhoneNumber(value)} // Update the state directly
+            inputProps={{
+              required: true,
+              className:
+                "border border-gray-300 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-600 rounded-md w-full ps-12 py-2 outline-none",
+            }}
+          />
+          {errors.phone && (
+            <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
           )}
         </div>
 

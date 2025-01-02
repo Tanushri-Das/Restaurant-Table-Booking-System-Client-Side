@@ -101,7 +101,7 @@ const BookingsPage = () => {
                     {booking.name}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-black text-[16px] font-medium">
-                    {booking.contact}
+                    +{booking.countryCode}-{booking.phone}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-black text-[16px] font-medium">
                     {booking.guests}
