@@ -12,14 +12,18 @@ const BookingsPage = () => {
   const { data: bookings = [], isLoading } = useQuery({
     queryKey: ["bookings"],
     queryFn: async () => {
-      const response = await axios.get("http://localhost:5000/bookings");
+      const response = await axios.get(
+        "https://resturant-table-booking-server-side.vercel.app/bookings"
+      );
       return response.data;
     },
   });
 
   const mutation = useMutation({
     mutationFn: async (id) => {
-      await axios.delete(`http://localhost:5000/bookings/${id}`);
+      await axios.delete(
+        `https://resturant-table-booking-server-side.vercel.app/bookings/${id}`
+      );
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["bookings"] });

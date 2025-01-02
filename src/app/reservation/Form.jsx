@@ -23,7 +23,7 @@ const BookingForm = () => {
   const fetchAvailableTimes = async (date) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/available-timeslots?date=${date}`
+        `https://resturant-table-booking-server-side.vercel.app/available-timeslots?date=${date}`
       );
       setAvailableTimes(response.data);
     } catch (error) {
@@ -38,7 +38,10 @@ const BookingForm = () => {
 
   const bookingMutation = useMutation({
     mutationFn: (newBooking) => {
-      return axios.post("http://localhost:5000/create-booking", newBooking);
+      return axios.post(
+        "https://resturant-table-booking-server-side.vercel.app/create-booking",
+        newBooking
+      );
     },
     onSuccess: () => {
       Swal.fire({
