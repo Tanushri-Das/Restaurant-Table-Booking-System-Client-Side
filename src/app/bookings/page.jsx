@@ -17,6 +17,7 @@ const BookingsPage = () => {
       );
       return response.data;
     },
+    refetchInterval: 20000,
   });
 
   const mutation = useMutation({
