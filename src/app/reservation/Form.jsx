@@ -101,7 +101,7 @@ const BookingForm = () => {
     <div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="max-w-xl mx-auto bg-white p-8 rounded shadow-md space-y-4"
+        className="max-w-xl mx-auto bg-white p-8 border rounded-xl shadow-lg space-y-4"
       >
         <div className="mb-4">
           <div className="flex items-center space-x-1 mb-2">
@@ -211,7 +211,7 @@ const BookingForm = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+          className="w-full text-white py-2 px-4 rounded-md bg-gradient-to-r from-[#835D23] to-[#B58130] hover:opacity-90"
         >
           Book Now
         </button>
